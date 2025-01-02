@@ -8,9 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@dimforge/rapier3d-compat':
+        specifier: ^0.14.0
+        version: 0.14.0
       '@threlte/core':
         specifier: ^7.3.1
         version: 7.3.1(svelte@4.2.19)(three@0.159.0)
+      '@threlte/rapier':
+        specifier: ^2.0.1
+        version: 2.0.1(@dimforge/rapier3d-compat@0.14.0)(svelte@4.2.19)(three@0.159.0)
       '@threlte/xr':
         specifier: ^0.1.4
         version: 0.1.4(svelte@4.2.19)(three@0.159.0)
@@ -51,6 +57,9 @@ packages:
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
+
+  '@dimforge/rapier3d-compat@0.14.0':
+    resolution: {integrity: sha512-/uHrUzS+CRQ+NQrrJCEDUkhwHlNsAAexbNXgbN9sHY+GwR+SFFAFrxRr8Llf5/AJZzqiLANdQIfJ63Cw4gJVqw==}
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -393,6 +402,13 @@ packages:
       svelte: '>=4'
       three: '>=0.152'
 
+  '@threlte/rapier@2.0.1':
+    resolution: {integrity: sha512-fT2bZ+eae0O9jVvkvW4NxryDUhhIO7DJWb7UJfcssX3NmFVwTpf9okzza03Iu2d6p69OPEfVFSe16XrdrohOfA==}
+    peerDependencies:
+      '@dimforge/rapier3d-compat': '>=0.11'
+      svelte: '>=4'
+      three: '>=0.152'
+
   '@threlte/xr@0.1.4':
     resolution: {integrity: sha512-eYVypXkXX4tafYjmez6ZxC3EHj1TrUAX/VklWL3BxIxQzwS4sI4lSBdCIum1VKKhXq66Ne2+/zQE7xw+gpNCCQ==}
     peerDependencies:
@@ -704,6 +720,8 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.8
       '@jridgewell/trace-mapping': 0.3.25
 
+  '@dimforge/rapier3d-compat@0.14.0': {}
+
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
 
@@ -961,6 +979,12 @@ snapshots:
   '@threlte/core@7.3.1(svelte@4.2.19)(three@0.159.0)':
     dependencies:
       mitt: 3.0.1
+      svelte: 4.2.19
+      three: 0.159.0
+
+  '@threlte/rapier@2.0.1(@dimforge/rapier3d-compat@0.14.0)(svelte@4.2.19)(three@0.159.0)':
+    dependencies:
+      '@dimforge/rapier3d-compat': 0.14.0
       svelte: 4.2.19
       three: 0.159.0
 
