@@ -22,8 +22,8 @@
     },
   });
 
-  let rigidBodyLeft: RapierRigidBody;
-  let rigidBodyRight: RapierRigidBody;
+  let rigidBodyLeft: RapierRigidBody = $state(undefined!);
+  let rigidBodyRight: RapierRigidBody = $state(undefined!);
 
   const materials: { left: THREE.Material } = {
     left: new THREE.MeshStandardMaterial({
@@ -35,10 +35,10 @@
     }),
   };
 
-  const fists: { left: THREE.Mesh; right: THREE.Mesh } = {
+  const fists: { left: THREE.Mesh; right: THREE.Mesh } = $state({
     left: undefined!,
     right: undefined!,
-  };
+  });
   // const handSabers: { left: THREE.Mesh; right: THREE.Mesh } = {
   //   left: undefined!,
   //   right: undefined!,
