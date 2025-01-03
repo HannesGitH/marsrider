@@ -1,4 +1,6 @@
 <script lang="ts">
+  let { isLoading = $bindable(true) } = $props();
+
   import * as THREE from "three";
   import { T, useLoader, useTask } from "@threlte/core";
   import { Collider, RigidBody } from "@threlte/rapier";
@@ -14,55 +16,84 @@
   let rigidBodyLeft: RapierRigidBody | undefined = $state(undefined);
   let rigidBodyRight: RapierRigidBody = $state(undefined!);
 
-  const fistEnvMap_ = textureLoader.load("/assets/img/weapon2.jpg");
-  const fistEnvMap = $derived(
-    fistEnvMap_.then((obj) => {
-      obj.mapping = THREE.EquirectangularReflectionMapping;
-      return obj;
-    })
-  );
-
+  let fistEnvMap = $state(null as null | THREE.Texture);
+  const fistEnvMapAsync = textureLoader.load("/assets/img/weapon2.jpg");
   $effect(() => {
-    materials.then((p) => {
-      console.log(p.left);
+    fistEnvMapAsync.then((obj) => {
+      obj.mapping = THREE.EquirectangularReflectionMapping;
+      fistEnvMap = obj;
     });
   });
 
-  const materials = $derived(
-    fistEnvMap.then((envMap) => {
-      return {
-        left: new THREE.MeshStandardMaterial({
-          roughness: 0.3,
-          metalness: 0.8,
-          color: "blue",
-          transparent: true,
-          envMap: envMap,
-          // map: envMap,
-        }),
-      };
-    })
-  );
+  $effect(() => {
+    isLoading = !leftFist && !rightFist && !fistEnvMap;
+  });
 
-  const leftFistRaw = loadObj("/assets/3d/left_fist.obj");
+  const materials = $derived({
+    left: new THREE.MeshStandardMaterial({
+      roughness: 0.3,
+      metalness: 0.8,
+      color: "blue",
+      transparent: true,
+      envMap: fistEnvMap,
+      side: THREE.DoubleSide,
+      opacity: 0.8,
+    }),
+    right: new THREE.MeshStandardMaterial({
+      roughness: 0.3,
+      metalness: 0.8,
+      color: "red",
+      transparent: true,
+      envMap: fistEnvMap,
+      side: THREE.DoubleSide,
+      opacity: 0.8,
+    }),
+  });
+
+  // left fist
+  let leftFistRaw = $state(null as null | THREE.Object3D);
+  const leftFistRawAsync = loadObj("/assets/3d/left_fist.obj");
+  $effect(() => {
+    leftFistRawAsync.then((obj) => {
+      leftFistRaw = obj;
+    });
+  });
 
   const leftFist = $derived(
-    (async()=>{
-      const mat = (await materials).left;
-      // if (!mat) return;
-      const obj = await leftFistRaw;
-      obj.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          child.material = mat;
-        }
-      });
-      return obj;
-    })()
+    !leftFistRaw
+      ? null
+      : (leftFistRaw.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            child.material = materials.left;
+          }
+        }),
+        leftFistRaw)
   );
 
-  const fists: { left: THREE.Mesh; right: THREE.Mesh } = $state({
+  // right fist
+  let rightFistRaw = $state(null as null | THREE.Object3D);
+  const rightFistRawAsync = loadObj("/assets/3d/right_fist.obj");
+  $effect(() => {
+    rightFistRawAsync.then((obj) => {
+      rightFistRaw = obj;
+    });
+  });
+
+  const rightFist = $derived(
+    !rightFistRaw
+      ? null
+      : (rightFistRaw.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            child.material = materials.right;
+          }
+        }),
+        rightFistRaw)
+  );
+
+  const fists: { left: THREE.Mesh; right: THREE.Mesh } = {
     left: undefined!,
     right: undefined!,
-  });
+  };
   // const handSabers: { left: THREE.Mesh; right: THREE.Mesh } = {
   //   left: undefined!,
   //   right: undefined!,
@@ -77,6 +108,8 @@
 
     const { left, right } = fists;
 
+    // console.log(left, right);
+    //TODO: make hitbox align
     if (left) {
       rigidBodyLeft?.setTranslation(left.getWorldPosition(v3), true);
       rigidBodyLeft?.setRotation(left.getWorldQuaternion(q), true);
@@ -87,36 +120,31 @@
       rigidBodyRight.setRotation(right.getWorldQuaternion(q), true);
     }
   });
-
-  const saberRadius = 0.02;
-  const saberLength = 1.4;
+  const fistCollisionRadius = .1;
 </script>
 
 <Controller left>
-  {#await leftFist then lf}
-    <T.Mesh on:create={({ ref }) => (fists.left = ref)}>
-      <T is={lf} />
+  {#if leftFist}
+    <T.Mesh oncreate={( ref ) => {fists.left = ref;}}>
+      <T is={leftFist} />
     </T.Mesh>
-  {/await}
+  {/if}
 </Controller>
 
 <Controller right>
-  <T.Mesh
-    rotation.x={Math.PI / 2}
-    position.z={-saberLength / 2}
-    on:create={({ ref }) => (fists.right = ref)}
-  >
-    <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
-    <T.MeshStandardMaterial roughness={0} color="red" />
-  </T.Mesh>
+  {#if rightFist}
+    <T.Mesh oncreate={( ref ) => {fists.right = ref;}}>
+      <T is={rightFist} />
+    </T.Mesh>
+  {/if}
 </Controller>
 
 <RigidBody type="kinematicPosition" bind:rigidBody={rigidBodyLeft}>
-  <Collider shape="capsule" args={[saberLength / 2, saberRadius]} />
+  <Collider shape="ball" args={[fistCollisionRadius]} />
 </RigidBody>
 
 <RigidBody type="kinematicPosition" bind:rigidBody={rigidBodyRight}>
-  <Collider shape="capsule" args={[saberLength / 2, saberRadius]} />
+  <Collider shape="ball" args={[fistCollisionRadius]} />
 </RigidBody>
 
 <!-- 
