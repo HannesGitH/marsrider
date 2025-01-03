@@ -43,21 +43,20 @@
     })
   );
 
+  const leftFistRaw = loadObj("/assets/3d/left_fist.obj");
+
   const leftFist = $derived(
-    materials.then((mats) =>
-      !mats.left.envMap
-        ? null
-        : loadObj("/assets/3d/left_fist.obj", {
-            transform: (obj) => {
-              obj.traverse(function (child) {
-                if (child instanceof THREE.Mesh) {
-                  child.material = mats.left;
-                }
-              });
-              return obj;
-            },
-          })
-    )
+    (async()=>{
+      const mat = (await materials).left;
+      // if (!mat) return;
+      const obj = await leftFistRaw;
+      obj.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.material = mat;
+        }
+      });
+      return obj;
+    })()
   );
 
   const fists: { left: THREE.Mesh; right: THREE.Mesh } = $state({
