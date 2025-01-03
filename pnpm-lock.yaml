@@ -12,17 +12,17 @@ importers:
         specifier: ^0.14.0
         version: 0.14.0
       '@threlte/core':
-        specifier: ^7.3.1
-        version: 7.3.1(svelte@5.16.1)(three@0.159.0)
+        specifier: ^8.0.0-next.39
+        version: 8.0.0-next.39(svelte@5.16.1)(three@0.172.0)
       '@threlte/rapier':
-        specifier: ^2.0.1
-        version: 2.0.1(@dimforge/rapier3d-compat@0.14.0)(svelte@5.16.1)(three@0.159.0)
+        specifier: 3.0.0-next.19
+        version: 3.0.0-next.19(@dimforge/rapier3d-compat@0.14.0)(svelte@5.16.1)(three@0.172.0)
       '@threlte/xr':
-        specifier: ^0.1.4
-        version: 0.1.4(svelte@5.16.1)(three@0.159.0)
+        specifier: 1.0.0-next.15
+        version: 1.0.0-next.15(svelte@5.16.1)(three@0.172.0)
       three:
-        specifier: ^0.159.0
-        version: 0.159.0
+        specifier: ^0.172.0
+        version: 0.172.0
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.0.0
@@ -396,24 +396,24 @@ packages:
       svelte: ^5.0.0-next.96 || ^5.0.0
       vite: ^5.0.0
 
-  '@threlte/core@7.3.1':
-    resolution: {integrity: sha512-qGfpboBL5PWYGqPIpnRmvp0ssW551ULRZsXRpWAwSPWGughiOSL9dBZjiwWQTQHUFMEErgquo6hbFJCuWE0uTg==}
+  '@threlte/core@8.0.0-next.39':
+    resolution: {integrity: sha512-TChf59J4YzfErfnO1mkmxCdnYDYYgNpk8iv3+W5JFjKLn8zsgb5yhB9HFmM4UVcF9AtOZ4ay3ekxT50NTtnIww==}
     peerDependencies:
-      svelte: '>=4'
+      svelte: '>=5'
+      three: '>=0.155'
+
+  '@threlte/rapier@3.0.0-next.19':
+    resolution: {integrity: sha512-xx+Gm371wUYmji1rT1s0ocKrDv5B1nahRUprY4Dwj4v85tM4ZrZsqxwHD8QM3a9AVEBjOz9kKHYAnBkU78uvgw==}
+    peerDependencies:
+      '@dimforge/rapier3d-compat': '>=0.14'
+      svelte: '>=5'
       three: '>=0.152'
 
-  '@threlte/rapier@2.0.1':
-    resolution: {integrity: sha512-fT2bZ+eae0O9jVvkvW4NxryDUhhIO7DJWb7UJfcssX3NmFVwTpf9okzza03Iu2d6p69OPEfVFSe16XrdrohOfA==}
+  '@threlte/xr@1.0.0-next.15':
+    resolution: {integrity: sha512-+J1NFWYCEgGJCp5gkIg4VFuqB38veKTVQvY0x5Tg3n69fnICiY3OLDeaZuqpPdtpUNyjb4EC9S6JatVAta8cdQ==}
     peerDependencies:
-      '@dimforge/rapier3d-compat': '>=0.11'
-      svelte: '>=4'
-      three: '>=0.152'
-
-  '@threlte/xr@0.1.4':
-    resolution: {integrity: sha512-eYVypXkXX4tafYjmez6ZxC3EHj1TrUAX/VklWL3BxIxQzwS4sI4lSBdCIum1VKKhXq66Ne2+/zQE7xw+gpNCCQ==}
-    peerDependencies:
-      svelte: '>=4'
-      three: '>=0.152'
+      svelte: '>=5'
+      three: '>=0.155'
 
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
@@ -637,8 +637,8 @@ packages:
     resolution: {integrity: sha512-FsA1OjAKMAFSDob6j/Tv2ZV9rY4SeqPd1WXQlQkFkePAozSHLp6tbkU9qa1xJ+uTRzMSM2Vx3USdsYZBXd3H3g==}
     engines: {node: '>=18'}
 
-  three@0.159.0:
-    resolution: {integrity: sha512-eCmhlLGbBgucuo4VEA9IO3Qpc7dh8Bd4VKzr7WfW4+8hMcIfoAVi1ev0pJYN9PTTsCslbcKgBwr2wNZ1EvLInA==}
+  three@0.172.0:
+    resolution: {integrity: sha512-6HMgMlzU97MsV7D/tY8Va38b83kz8YJX+BefKjspMNAv0Vx6dxMogHOrnRl/sbMIs3BPUKijPqDqJ/+UwJbIow==}
 
   tiny-glob@0.2.9:
     resolution: {integrity: sha512-g/55ssRPUjShh+xkfx9UPDXqhckHEsHr4Vd9zX55oSdGZc/MD0m3sferOkwWtp98bv+kcVfEHtRJgBVJzelrzg==}
@@ -968,22 +968,22 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@threlte/core@7.3.1(svelte@5.16.1)(three@0.159.0)':
+  '@threlte/core@8.0.0-next.39(svelte@5.16.1)(three@0.172.0)':
     dependencies:
       mitt: 3.0.1
       svelte: 5.16.1
-      three: 0.159.0
+      three: 0.172.0
 
-  '@threlte/rapier@2.0.1(@dimforge/rapier3d-compat@0.14.0)(svelte@5.16.1)(three@0.159.0)':
+  '@threlte/rapier@3.0.0-next.19(@dimforge/rapier3d-compat@0.14.0)(svelte@5.16.1)(three@0.172.0)':
     dependencies:
       '@dimforge/rapier3d-compat': 0.14.0
       svelte: 5.16.1
-      three: 0.159.0
+      three: 0.172.0
 
-  '@threlte/xr@0.1.4(svelte@5.16.1)(three@0.159.0)':
+  '@threlte/xr@1.0.0-next.15(svelte@5.16.1)(three@0.172.0)':
     dependencies:
       svelte: 5.16.1
-      three: 0.159.0
+      three: 0.172.0
 
   '@types/cookie@0.6.0': {}
 
@@ -1215,7 +1215,7 @@ snapshots:
       magic-string: 0.30.17
       zimmerframe: 1.1.2
 
-  three@0.159.0: {}
+  three@0.172.0: {}
 
   tiny-glob@0.2.9:
     dependencies:
