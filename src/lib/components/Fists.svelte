@@ -11,29 +11,54 @@
   const { load: loadObj } = useLoader(OBJLoader);
   const textureLoader = useLoader(THREE.TextureLoader);
 
-  const leftFist = loadObj("/assets/3d/left_fist.obj", {
-    transform: (obj) => {
-      obj.traverse(function (child) {
-        if (child instanceof THREE.Mesh) {
-          child.material = materials.left;
-        }
-      });
-      return obj;
-    },
-  });
-
-  let rigidBodyLeft: RapierRigidBody = $state(undefined!);
+  let rigidBodyLeft: RapierRigidBody | undefined = $state(undefined);
   let rigidBodyRight: RapierRigidBody = $state(undefined!);
 
-  const materials: { left: THREE.Material } = {
-    left: new THREE.MeshStandardMaterial({
-      roughness: 0.3,
-      metalness: 0.8,
-      color: "blue",
-      transparent: true,
-      // envMap: textureLoader.load("/assets/img/weapon2.jpg"),
-    }),
-  };
+  const fistEnvMap_ = textureLoader.load("/assets/img/weapon2.jpg");
+  const fistEnvMap = $derived(
+    fistEnvMap_.then((obj) => {
+      obj.mapping = THREE.EquirectangularReflectionMapping;
+      return obj;
+    })
+  );
+
+  $effect(() => {
+    materials.then((p) => {
+      console.log(p.left);
+    });
+  });
+
+  const materials = $derived(
+    fistEnvMap.then((envMap) => {
+      return {
+        left: new THREE.MeshStandardMaterial({
+          roughness: 0.3,
+          metalness: 0.8,
+          color: "blue",
+          transparent: true,
+          envMap: envMap,
+          // map: envMap,
+        }),
+      };
+    })
+  );
+
+  const leftFist = $derived(
+    materials.then((mats) =>
+      !mats.left.envMap
+        ? null
+        : loadObj("/assets/3d/left_fist.obj", {
+            transform: (obj) => {
+              obj.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                  child.material = mats.left;
+                }
+              });
+              return obj;
+            },
+          })
+    )
+  );
 
   const fists: { left: THREE.Mesh; right: THREE.Mesh } = $state({
     left: undefined!,
@@ -54,8 +79,8 @@
     const { left, right } = fists;
 
     if (left) {
-      rigidBodyLeft.setTranslation(left.getWorldPosition(v3), true);
-      rigidBodyLeft.setRotation(left.getWorldQuaternion(q), true);
+      rigidBodyLeft?.setTranslation(left.getWorldPosition(v3), true);
+      rigidBodyLeft?.setRotation(left.getWorldQuaternion(q), true);
     }
 
     if (right) {
@@ -69,11 +94,11 @@
 </script>
 
 <Controller left>
-  {#if $leftFist}
+  {#await leftFist then lf}
     <T.Mesh on:create={({ ref }) => (fists.left = ref)}>
-      <T is={$leftFist} />
+      <T is={lf} />
     </T.Mesh>
-  {/if}
+  {/await}
 </Controller>
 
 <Controller right>
