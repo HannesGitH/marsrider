@@ -6,6 +6,7 @@
 
 <XR>
   <Fists></Fists>
+  <Controller left/>
 </XR>
 
 <T.AmbientLight />

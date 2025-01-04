@@ -109,32 +109,60 @@
     const { left, right } = fists;
 
     // console.log(left, right);
-    //TODO: make hitbox align
+    // TODO: Adjust hitbox alignment
     if (left) {
-      rigidBodyLeft?.setTranslation(left.getWorldPosition(v3), true);
-      rigidBodyLeft?.setRotation(left.getWorldQuaternion(q), true);
+      const worldPos = left.getWorldPosition(v3);
+      const offset = new THREE.Vector3(0, 0.01, 0.02);
+      const betterWorldPos = worldPos.add(
+        offset.applyQuaternion(left.getWorldQuaternion(q))
+      );
+      rigidBodyLeft?.setTranslation(betterWorldPos, true);
+      // its a sphere, lol, we wouldnt need to rotate it
+      // rigidBodyLeft?.setRotation(left.getWorldQuaternion(q), true);
     }
 
     if (right) {
-      rigidBodyRight.setTranslation(right.getWorldPosition(v3), true);
-      rigidBodyRight.setRotation(right.getWorldQuaternion(q), true);
+      const worldPos = right.getWorldPosition(v3);
+      const offset = new THREE.Vector3(0, 0.01, 0.02);
+      const betterWorldPos = worldPos.add(
+        offset.applyQuaternion(right.getWorldQuaternion(q))
+      );
+      rigidBodyRight?.setTranslation(betterWorldPos, true);
+      // its a sphere, lol, we wouldnt need to rotate it
+      // rigidBodyRight?.setRotation(right.getWorldQuaternion(q), true);
     }
   });
-  const fistCollisionRadius = .1;
+  const fistCollisionRadius = 0.08;
 </script>
 
 <Controller left>
   {#if leftFist}
-    <T.Mesh oncreate={( ref ) => {fists.left = ref;}}>
-      <T is={leftFist} />
+    <T.Mesh
+      oncreate={(ref) => {
+        fists.left = ref;
+      }}
+    >
+      <T
+        is={leftFist}
+        position={[0, 0, -0.06]}
+        rotation={[0, 0, Math.PI / 7]}
+      />
     </T.Mesh>
   {/if}
 </Controller>
 
 <Controller right>
   {#if rightFist}
-    <T.Mesh oncreate={( ref ) => {fists.right = ref;}}>
-      <T is={rightFist} />
+    <T.Mesh
+      oncreate={(ref) => {
+        fists.right = ref;
+      }}
+    >
+      <T
+        is={rightFist}
+        position={[0, 0, -0.06]}
+        rotation={[0, 0, Math.PI / 7]}
+      />
     </T.Mesh>
   {/if}
 </Controller>
