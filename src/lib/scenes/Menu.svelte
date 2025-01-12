@@ -5,12 +5,14 @@
   pointerControls("right");
 </script>
 
-<XR>
+<XR foveation={0.3}>
   <Controller right />
 </XR>
 
 <T.Mesh position={[0, 0, 0]}>
-  <HTML transform>
+  <HTML
+  transform
+  >
     <div>
       <a style="font-size: 2em; color: white;" href="/vr/game">Start</a>
     </div>
