@@ -1,7 +1,3 @@
-import { baseUrl } from "./common";
-import type { paths } from '$lib/types/BeatSaverTypes';
+import { apiCall } from "./api";
 
-function getListPaginated(page: Number) {
-    const path : paths = `/maps/plays/${page}`;
-    return fetch(baseUrl + );
-}
+apiCall("/maps/plays/{page}", "get", { path: { page: 0 } });
