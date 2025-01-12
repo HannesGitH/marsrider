@@ -133,6 +133,8 @@
     }
   });
   const fistCollisionRadius = 0.08;
+  const fistMeshOffsetZ = -0.06;
+  const fistMeshYaw = Math.PI / 7;
 </script>
 
 <Controller left>
@@ -144,8 +146,8 @@
     >
       <T
         is={leftFist}
-        position={[0, 0, -0.06]}
-        rotation={[0, 0, Math.PI / 7]}
+        position={[0,0,fistMeshOffsetZ]}
+        rotation={[0, 0, fistMeshYaw]}
       />
     </T.Mesh>
   {/if}
@@ -160,8 +162,8 @@
     >
       <T
         is={rightFist}
-        position={[0, 0, -0.06]}
-        rotation={[0, 0, Math.PI / 7]}
+        position={[0,0,fistMeshOffsetZ]}
+        rotation={[0, 0, -fistMeshYaw]}
       />
     </T.Mesh>
   {/if}
