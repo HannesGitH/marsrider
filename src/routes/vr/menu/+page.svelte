@@ -1,5 +1,5 @@
 <script>
-  import Scene from "$lib/scenes/Menu.svelte";
+  import Menu from "$lib/scenes/Menu.svelte";
 
 </script>
-<Scene />
+<Menu />
