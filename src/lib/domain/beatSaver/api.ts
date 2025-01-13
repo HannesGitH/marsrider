@@ -23,7 +23,7 @@ type ResponseType<
 export const apiCall = async <P extends Path, M extends PathMethod<P>>(
   url: P,
   method: M,
-  ...params: RequestParams<P, M> extends undefined ? [] : [RequestParams<P, M>]
+  params: RequestParams<P, M> 
 ): Promise<ResponseType<P, M>> => {
   const options: RequestInit = {
     method: method.toString(),
@@ -32,15 +32,15 @@ export const apiCall = async <P extends Path, M extends PathMethod<P>>(
     },
   };
 
-  if (params.length > 0 && method === "GET" && 'path' in params[0]!) {
-    for (const [key, value] of Object.entries(params[0].path)) {
+  if (method === "get" && 'path' in params!) {
+    for (const [key, value] of Object.entries(params.path)) {
       url = url.replace(`{${key}}`, encodeURIComponent(value as string)) as P;
     }
   }
   let fullUrl = `${baseUrl}${url}`;
 
   if (params.length > 0) {
-    if (method === "GET") {
+    if (method === "get") {
       const queryParams = new URLSearchParams(
         params[0] as Record<string, string>
       ).toString();
