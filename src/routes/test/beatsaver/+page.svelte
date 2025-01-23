@@ -18,7 +18,7 @@
   <ul>
     {#each mapList as mapData}
       <li>
-        {mapData.curator?.email}
+        {mapData.name}
       </li>
     {/each}
   </ul>

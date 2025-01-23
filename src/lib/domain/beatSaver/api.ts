@@ -27,9 +27,9 @@ export const apiCall = async <P extends Path, M extends PathMethod<P>>(
 ): Promise<ResponseType<P, M>> => {
   const options: RequestInit = {
     method: method.toString(),
-    headers: {
-      "Content-Type": "application/json",
-    },
+    // headers: {
+    //   "Content-Type": "application/json",
+    // },
   };
 
   if (method === "get" && 'path' in params!) {
