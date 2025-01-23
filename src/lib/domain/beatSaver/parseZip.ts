@@ -1,8 +1,11 @@
 import type { definitions } from "$lib/types/BeatSaverTypes";
 import JSZip from "jszip";
 
-//todo: not any
-export type Data = {soundTrack: ArrayBuffer, map: any};
+export type Obstacle = {_time: number, _lineIndex: number, _type: number, _duration: number, _width: number};
+export type Note = {_time: number, _lineIndex: number, _lineLayer: number, _type: number, _cutDirection: number};
+export type Event = {_time: number, _type: number, _value: number, _customData: any};
+
+export type Data = {soundTrack: ArrayBuffer, map: { _version: string, _events: Event[], _notes: Note[], _obstacles: Obstacle[] }};
 export type InputParams = {difficulty: definitions['MapDifficulty']['difficulty']};
 
 export const parseZip = async (zipUrl: string, {difficulty}:InputParams):Promise<Data> => {
