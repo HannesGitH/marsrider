@@ -1,6 +1,6 @@
 <script lang="ts">
-  export const prerender = true
-  import type { PageProps } from "./$types";
+  export const prerender = true;
+  import type { PageProps } from "../$types";
   import {
     getDefault as getDefaultList,
     type MapList,
@@ -54,6 +54,25 @@
   <img src={image.src} alt={image.caption} width="100" height="100" />
 {/snippet}
 
+{#snippet button({
+  zipUrl: url,
+  difficulty,
+  name,
+}: {
+  zipUrl: string;
+  difficulty?: string;
+  name?: string;
+})}
+  {@const title:string = encodeURIComponent(name || "unknown")}
+  {@const diff = encodeURIComponent(difficulty || "unknown")}
+  <a
+    href={`/test/beatsaver/play/${title}/${diff}?zip=${encodeURIComponent(url)}`}
+    target="_blank"
+  >
+    <button>Play</button>
+  </a>
+{/snippet}
+
 <ul>
   {#each mapList as mapData}
     <li class="mapListItem">
@@ -76,13 +95,18 @@
               <ul>
                 {#each v.diffs as diff}
                   <li>
-                    <span>{diff.difficulty}</span>
+                    <span>{diff.difficulty}</span><spacer></spacer>
+                    {#if v.downloadURL}
+                      {@render button({
+                        zipUrl: v.downloadURL,
+                        difficulty: diff.difficulty,
+                        name: mapData.name,
+                      })}
+                    {/if}
                   </li>
                 {/each}
               </ul>
             {/if}
-            <spacer></spacer>
-            <span>{v.downloadURL}</span>
           </div>
         {/each}
       {/if}
