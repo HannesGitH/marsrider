@@ -1,11 +1,11 @@
 <script lang="ts">
-  import App from "$lib/components/App.svelte";
+  import App3D from "$lib/components/App3D.svelte";
 </script>
 
 <div>
-  <App>
+  <App3D>
     <slot />
-  </App>
+  </App3D>
 </div>
 
 <style>
