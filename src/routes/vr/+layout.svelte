@@ -3,7 +3,7 @@
 </script>
 
 <div>
-  <App3D>
+  <App3D debug>
     {#snippet content()}
       <slot />
     {/snippet}

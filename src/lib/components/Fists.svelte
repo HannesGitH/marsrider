@@ -3,11 +3,12 @@
 
   import * as THREE from "three";
   import { T, useLoader, useTask } from "@threlte/core";
-  import { Collider, RigidBody } from "@threlte/rapier";
+  import { Collider, CollisionGroups, RigidBody } from "@threlte/rapier";
   import type { RigidBody as RapierRigidBody } from "@dimforge/rapier3d-compat";
   import { Controller, Hand, useXR } from "@threlte/xr";
   import { OBJLoader } from "three/examples/jsm/Addons.js";
   import { theme } from "$lib/utils/theme.svelte";
+  import { lColGroup, rColGroup } from "$lib/utils/consts/collisionGroups";
 
   const { isHandTracking } = useXR();
 
@@ -30,7 +31,7 @@
     isLoading = !leftFist && !rightFist && !fistEnvMap;
   });
 
-  const mkMeshMaterial = (color : string) =>
+  const mkMeshMaterial = (color: string) =>
     new THREE.MeshStandardMaterial({
       roughness: 0.3,
       metalness: 0.8,
@@ -165,13 +166,17 @@
   {/if}
 </Controller>
 
-<RigidBody type="kinematicPosition" bind:rigidBody={rigidBodyLeft}>
-  <Collider shape="ball" args={[fistCollisionRadius]} />
-</RigidBody>
+<CollisionGroups groups={[lColGroup]}>
+  <RigidBody type="kinematicPosition" bind:rigidBody={rigidBodyLeft}>
+    <Collider shape="ball" args={[fistCollisionRadius]} mass={5} sensor/>
+  </RigidBody>
+</CollisionGroups>
 
-<RigidBody type="kinematicPosition" bind:rigidBody={rigidBodyRight}>
-  <Collider shape="ball" args={[fistCollisionRadius]} />
-</RigidBody>
+<CollisionGroups groups={[rColGroup]}>
+  <RigidBody type="kinematicPosition" bind:rigidBody={rigidBodyRight}>
+    <Collider shape="ball" args={[fistCollisionRadius]} mass={5} sensor/>
+  </RigidBody>
+</CollisionGroups>
 
 <!-- 
 <Hand left>
