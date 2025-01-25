@@ -1,6 +1,5 @@
 <script lang="ts">
-  export const prerender = true;
-  import type { PageProps } from "../$types";
+  import type { PageProps } from "./$types";
   import {
     getDefault as getDefaultList,
     type MapList,
@@ -40,6 +39,10 @@
   };
 
   let currSound: HTMLAudioElement | null = null;
+  const stopSound = () => {
+    if (currSound) currSound.pause();
+    currSound = null;
+  };
   const playSound = async (url?: string) => {
     if (!url) return;
     if (currSound) currSound.pause();
@@ -69,7 +72,12 @@
     href={`/test/beatsaver/play/${title}/${diff}?zip=${encodeURIComponent(url)}`}
     target="_blank"
   >
-    <button>Play</button>
+    <button>PlayTest</button>
+  </a>
+  <a
+    href={`/vr/play/${title}/${diff}?zip=${encodeURIComponent(url)}`}
+  >
+    <button>PlayVr</button>
   </a>
 {/snippet}
 
@@ -85,6 +93,7 @@
             class="mapListDetails"
             role="button"
             onmouseenter={() => playSound(v.previewURL)}
+            onmouseleave={stopSound}
             tabindex={0}
           >
             {@render figure({

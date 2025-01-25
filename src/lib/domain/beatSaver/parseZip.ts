@@ -7,14 +7,19 @@ export type Event = {_time: number, _type: number, _value: number, _customData: 
 
 export type Data = {soundTrack: ArrayBuffer, map: { _version: string, _events: Event[], _notes: Note[], _obstacles: Obstacle[] }};
 export type InputParams = {difficulty: definitions['MapDifficulty']['difficulty']};
+export type Fetcher = () => Promise<Response>; 
 
-export const parseZip = async (zipUrl: string, {difficulty}:InputParams):Promise<Data> => {
-	const response = await fetch(zipUrl);
+export const parseZip = async (fetcher: Fetcher, {difficulty}:InputParams):Promise<Data> => {
+    console.log("fetching zip");
+	const response = await fetcher();
+    console.log("fetched zip");
 	const buffer = await response.arrayBuffer();
 	const zip = await JSZip.loadAsync(buffer);
+    console.log("loaded zip");
     const soundTrackBuff = await zip.filter((path) => path.endsWith(".egg"))[0].async("arraybuffer");
     // const soundTrack = new Audio(URL.createObjectURL(new Blob([await soundTrackBuff])));
-    const mapStr = await zip.file(`${difficulty}Standard.dat`)?.async("string");
+    const mapStr = await zip.filter((path) => path.startsWith(difficulty!))[0].async("string");
     const map = JSON.parse(mapStr!);
+    console.log('parsed zip');
 	return {soundTrack: soundTrackBuff, map };
 }

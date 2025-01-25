@@ -7,6 +7,7 @@
   import type { RigidBody as RapierRigidBody } from "@dimforge/rapier3d-compat";
   import { Controller, Hand, useXR } from "@threlte/xr";
   import { OBJLoader } from "three/examples/jsm/Addons.js";
+  import { theme } from "$lib/utils/theme.svelte";
 
   const { isHandTracking } = useXR();
 
@@ -29,25 +30,20 @@
     isLoading = !leftFist && !rightFist && !fistEnvMap;
   });
 
+  const mkMeshMaterial = (color : string) =>
+    new THREE.MeshStandardMaterial({
+      roughness: 0.3,
+      metalness: 0.8,
+      color,
+      transparent: true,
+      envMap: fistEnvMap,
+      side: THREE.DoubleSide,
+      opacity: 0.8,
+    });
+
   const materials = $derived({
-    left: new THREE.MeshStandardMaterial({
-      roughness: 0.3,
-      metalness: 0.8,
-      color: "blue",
-      transparent: true,
-      envMap: fistEnvMap,
-      side: THREE.DoubleSide,
-      opacity: 0.8,
-    }),
-    right: new THREE.MeshStandardMaterial({
-      roughness: 0.3,
-      metalness: 0.8,
-      color: "red",
-      transparent: true,
-      envMap: fistEnvMap,
-      side: THREE.DoubleSide,
-      opacity: 0.8,
-    }),
+    left: mkMeshMaterial(theme.left),
+    right: mkMeshMaterial(theme.right),
   });
 
   // left fist
@@ -146,7 +142,7 @@
     >
       <T
         is={leftFist}
-        position={[0,0,fistMeshOffsetZ]}
+        position={[0, 0, fistMeshOffsetZ]}
         rotation={[0, 0, fistMeshYaw]}
       />
     </T.Mesh>
@@ -162,7 +158,7 @@
     >
       <T
         is={rightFist}
-        position={[0,0,fistMeshOffsetZ]}
+        position={[0, 0, fistMeshOffsetZ]}
         rotation={[0, 0, -fistMeshYaw]}
       />
     </T.Mesh>

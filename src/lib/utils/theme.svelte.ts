@@ -1,0 +1,1 @@
+export const theme : { right: string, left :string } = $state({ right: "blue", left: "red" });

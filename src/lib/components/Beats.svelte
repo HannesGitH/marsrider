@@ -1,60 +1,44 @@
 <script lang="ts">
-  import * as THREE from "three";
+  import { Vector3 } from "three";
   import { T } from "@threlte/core";
   import { InstancedMesh, Instance, RoundedBoxGeometry } from "@threlte/extras";
   import { Collider, RigidBody } from "@threlte/rapier";
+  import type { Note } from "$lib/domain/beatSaver/parseZip";
+  import { theme } from "$lib/utils/theme.svelte";
 
-  const colors = [
-    "#ff5252",
-    "#ff4081",
-    "#d500f9",
-    "#3d5afe",
-    "#40c4ff",
-    "#18ffff",
-    "#f9a825",
-    "#ffd740",
-    "#bf360c",
-  ] as const;
-  const positions = [
-    [-1, -1],
-    [-1, 0],
-    [-1, 1],
-    [0, -1],
-    [0, 0],
-    [0, 1],
-    [1, -1],
-    [1, 0],
-    [1, 1],
-  ] as const;
+  const { notes }: { notes: Note[] } = $props();
+  const speed = 3;
+  const offsetZ = 0;
 
   type Block = {
-    position: THREE.Vector3;
+    position: Vector3;
     color: string;
   };
 
-  let cubes: Block[] = [];
-  let numCubes = 100;
-  const margin = 0.4;
-  const spacing = 8;
+  const lineWidth = 0.5;
+  const numCubes = notes.length;
 
-  for (let i = 0; i < numCubes; i += 1) {
-    const [x, y] = positions[Math.trunc(Math.random() * positions.length)]!;
-    cubes.push({
-      position: new THREE.Vector3(x - margin, y - margin, -i * spacing),
-      color: colors[i % colors.length]!,
-    });
-  }
+  const cubes: Block[] = $derived(
+    notes.map((note) => {
+      const color = note._type === 0 ? theme.left : theme.right; 
+      const x = (note._lineIndex - 1) * lineWidth;
+      const y = note._lineLayer * lineWidth;
+      const z = note._time * speed;
+      return {
+        color,
+        position: new Vector3(x, y, -z),
+      };
+    })
+  );
 
-  const boxRadius = 0.15;
-  const boxSize = 0.6;
-  const offsetY = 1.5;
-  const offsetZ = 50;
-  const speed = 12;
+  const boxRadius = 0.1 * lineWidth;
+  const boxSize = 0.6 * lineWidth;
+  const offsetY = 0.5;
 </script>
 
 <InstancedMesh limit={numCubes}>
   <RoundedBoxGeometry radius={boxRadius} args={[boxSize, boxSize, boxSize]} />
-  <T.MeshStandardMaterial roughness={0} metalness={0.2} />
+  <T.MeshStandardMaterial roughness={0} metalness={0.8} />
 
   {#each cubes as { position, color }, index (index)}
     <T.Group

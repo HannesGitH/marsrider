@@ -4,7 +4,9 @@
 
 <div>
   <App3D>
-    <slot />
+    {#snippet content()}
+      <slot />
+    {/snippet}
   </App3D>
 </div>
 
