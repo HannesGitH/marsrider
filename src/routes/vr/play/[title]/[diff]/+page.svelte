@@ -28,7 +28,7 @@
   });
 
   const menuPosition = $derived(
-    (isPaused ? [0, 1, -1] : [-1, 1, -2]) as [x: number, y: number, z: number]
+    (isPaused ? [0, 1, -1] : [-2, 1, -2]) as [x: number, y: number, z: number]
   );
   const menuRotation = $derived(
     (isPaused ? [0, 0, 0] : [0, 1 / 2, 0]) as [x: number, y: number, z: number]
