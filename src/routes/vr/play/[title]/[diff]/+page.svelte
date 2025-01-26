@@ -11,7 +11,9 @@
   import PlayButton from "$lib/components/PlayButton.svelte";
   import MyController from "$lib/components/MyController.svelte";
   import { Tween } from "svelte/motion";
-  import { quadInOut } from 'svelte/easing';
+  import { quadInOut } from "svelte/easing";
+  import { Audio } from "three";
+  import { createSoundWithBuffer, MyAudio } from "$lib/utils/audio";
   let { data: fullData }: PageProps = $props();
   const { data: promisedData, title } = fullData;
 
@@ -20,17 +22,30 @@
   let data = $state(null as null | ZipData);
   let time = $state(0);
 
-  promisedData.then((d) => {
+  let audio: MyAudio;
+
+  promisedData.then(async (d) => {
     data = d;
+    audio = await createSoundWithBuffer(d.soundTrack);
     loading = false;
+  });
+
+  $effect(() => {
+    audio && audio.togglePlayPause({ shouldPause: isPaused });
   });
 
   useTask((delta) => {
     if (!isPaused) time += delta;
   });
 
-  const menuPositionTween = new Tween([0, 1, -1], { duration: 200, easing: quadInOut });
-  const menuRotationTween = new Tween([0, 0, 0], { duration: 300, easing: quadInOut });
+  const menuPositionTween = new Tween([0, 1, -1], {
+    duration: 200,
+    easing: quadInOut,
+  });
+  const menuRotationTween = new Tween([0, 0, 0], {
+    duration: 300,
+    easing: quadInOut,
+  });
 
   $effect(() => {
     menuPositionTween.set(isPaused ? [0, 1, -1] : [-2, 1, -2]);
