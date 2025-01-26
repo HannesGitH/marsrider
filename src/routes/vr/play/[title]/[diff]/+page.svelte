@@ -1,4 +1,5 @@
 <script lang="ts">
+  import * as EXTRA from "@threlte/extras";
   import Fists from "$lib/components/Fists.svelte";
   import { Controller, XR } from "@threlte/xr";
   import type { PageProps } from "./$types";
@@ -43,6 +44,7 @@
 </XR>
 {#if data}
   <T.Group position={menuPosition} rotation={menuRotation}>
+    <EXTRA.Text text={title} position={[0, 0.3, 0]}  anchorX="center"/>  
     <PlayButton bind:paused={isPaused} />
   </T.Group>
   <Beats notes={data.map._notes} currTime={time} />
