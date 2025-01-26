@@ -11,7 +11,7 @@
   useTask((delta) => {
     spentTime += delta;
     val = Math.sin(spentTime * 2) * 0.5 + 0.5;
-    val2 = Math.sin(spentTime * 3) * 0.5 + 0.5;
+    val2 = Math.sin(spentTime * 4) * 0.5 + 0.5;
   });
   const uniforms = {
     uColVal1: {

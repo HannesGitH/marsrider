@@ -30,10 +30,12 @@
     loading = false;
   });
 
-  $effect(() => {
-    isPaused;
-    audio && audio.togglePlayPause({ shouldPause: isPaused });
-  });
+  const onPausePressed = async () => {
+    console.log('pause pressed');
+    if (!audio) return; 
+    const playing = await audio.togglePlayPause({ shouldPause: !isPaused });
+    isPaused = !playing;
+  };
 
   useTask((delta) => {
     if (!isPaused) time += delta;
@@ -72,9 +74,9 @@
 {#if data}
   <T.Group position={menuPosition} rotation={menuRotation}>
     <EXTRA.Text text={title} position={[0, 0.3, 0]} anchorX="center" />
-    <PlayButton bind:paused={isPaused} />
+    <PlayButton paused={isPaused} onPressed={onPausePressed} />
   </T.Group>
-  <Beats notes={data.map._notes} currTime={time} />
+  <Beats notes={data.map._notes} currTime={(time * data.bpm) / 60} />
 {/if}
 <Platform />
 

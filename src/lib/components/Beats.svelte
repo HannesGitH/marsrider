@@ -21,27 +21,37 @@
     position: Vector3;
     color: string;
     colGroups: (typeof lColGroup | typeof rColGroup)[];
+    _note: Note;
   };
 
   const lineWidth = 0.5;
   const numCubes = notes.length;
 
+  //keep dependencies low, so we only calc once
   const cubes: Block[] = $derived(
-    notes.map((note) => {
-      const color = note._type === 0 ? theme.left : theme.right;
-      const colGroup = note._type === 0 ? lColGroup : rColGroup;
-      const x = (note._lineIndex - 1) * lineWidth;
-      const y = note._lineLayer * lineWidth;
-      const z = note._time * speed;
-      return {
-        color,
-        position: new Vector3(x, y, -z),
-        colGroups: [colGroup],
-      };
-    })
+    notes
+      .filter((note) => [0, 1].includes(note._type))
+      .map((note) => {
+        const color = note._type === 0 ? theme.left : theme.right;
+        const colGroup = note._type === 0 ? lColGroup : rColGroup;
+        const x = (note._lineIndex - 1) * lineWidth;
+        const y = note._lineLayer * lineWidth;
+        const z = note._time * speed;
+        return {
+          color,
+          position: new Vector3(x, y, -z),
+          colGroups: [colGroup],
+          _note: note,
+        };
+      })
   );
 
-  const renderCubes = cubes.filter((cube) => cube.position.z < renderDistance);
+  const renderCubes = $derived(
+    cubes.filter((cube) => {
+      const t = cube._note._time;
+      return t > currTime - 2 && t < currTime + speed * renderDistance;
+    })
+  );
 
   const boxRadius = 0.1 * lineWidth;
   const boxSize = 0.6 * lineWidth;
@@ -52,11 +62,11 @@
   <RoundedBoxGeometry radius={boxRadius} args={[boxSize, boxSize, boxSize]} />
   <T.MeshStandardMaterial roughness={0} metalness={0.8} />
 
-  {#each cubes as { position, color, colGroups }, index (index)}
+  {#each renderCubes as { position, color, colGroups }, index (index)}
     <T.Group
       position.x={position.x}
       position.y={position.y + offsetY}
-      position.z={position.z - offsetZ}
+      position.z={position.z - offsetZ + speed * currTime}
     >
       <CollisionGroups groups={colGroups}>
         <RigidBody>
@@ -65,8 +75,8 @@
             mass={0.5}
             args={[boxSize / 2, boxSize / 2, boxSize / 2]}
           />
-          <Instance {color} />
         </RigidBody>
+        <Instance {color} />
       </CollisionGroups>
     </T.Group>
   {/each}

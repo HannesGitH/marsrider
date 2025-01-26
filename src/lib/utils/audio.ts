@@ -37,14 +37,14 @@ export class MyAudio {
       this._started = true;
     }
   }
-  togglePlayPause = ({shouldPause}: {shouldPause?: boolean}) :boolean => {
+  togglePlayPause = async ({shouldPause}: {shouldPause?: boolean}) :Promise<boolean> => {
     console.log('togglePlayPause', shouldPause);
     if (shouldPause ?? this._context.state === "running") {
-      this._context.suspend();
+      await this._context.suspend();
       return false;
     } else if (this._context.state === "suspended") {
       this._start();
-      this._context.resume();
+      await this._context.resume();
     }
     return true;
   }

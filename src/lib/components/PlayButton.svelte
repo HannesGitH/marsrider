@@ -2,7 +2,7 @@
   import { T } from "@threlte/core";
   import { pointerControls } from "@threlte/xr";
   import { Root, Container, Text, Content } from "threlte-uikit";
-  let { paused = $bindable(true) } = $props();
+  let { paused = $bindable(true), onPressed } : {paused: boolean, onPressed: () => void } = $props();
 
   pointerControls("right");
   const text = $derived((paused ? "Play" : "Pause").toUpperCase());
@@ -15,7 +15,9 @@
   let wasClicked = false;
   const onclick = () => {
     wasClicked = !wasClicked;
-    if (wasClicked) paused = !paused;
+    if (wasClicked) return;
+    paused = !paused; 
+    onPressed(); 
   };
 </script>
 
