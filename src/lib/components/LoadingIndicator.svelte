@@ -6,10 +6,12 @@
   import vertexShader from "$lib/shader/loading/vertex.glsl?raw";
 
   let val = $state(0.5);
+  let val2 = $state(0.5);
   let spentTime = $state(0.5);
   useTask((delta) => {
     spentTime += delta;
     val = Math.sin(spentTime * 2) * 0.5 + 0.5;
+    val2 = Math.sin(spentTime * 3) * 0.5 + 0.5;
   });
   const uniforms = {
     uColVal1: {
@@ -22,7 +24,7 @@
 </script>
 
 <T.Mesh position={[0, 0, 0]} rotation={[0, spentTime, 0]}>
-  <T.TorusKnotGeometry args={[0.5, 0.1 * val + 0.1]} />
+  <T.TorusKnotGeometry args={[0.5, 0.1 * val2 + 0.1]} />
   <T.ShaderMaterial
     {fragmentShader}
     {vertexShader}

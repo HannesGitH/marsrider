@@ -31,6 +31,7 @@
   });
 
   $effect(() => {
+    isPaused;
     audio && audio.togglePlayPause({ shouldPause: isPaused });
   });
 
