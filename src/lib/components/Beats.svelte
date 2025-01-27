@@ -6,6 +6,7 @@
   import type { Note } from "$lib/domain/beatSaver/parseZip";
   import { theme } from "$lib/utils/theme.svelte";
   import { lColGroup, rColGroup } from "$lib/utils/consts/collisionGroups";
+  import type { RigidBody as RapierRigidBody } from "@dimforge/rapier3d-compat";
 
   export type Props = {
     notes: Note[];
@@ -14,7 +15,7 @@
     currTime: number;
   };
 
-  const { notes, renderDistance = 10, speed = 3, currTime }: Props = $props();
+  const { notes, renderDistance = 5, speed = 3, currTime }: Props = $props();
   const offsetZ = 0;
 
   type Block = {
@@ -46,6 +47,14 @@
       })
   );
 
+  let bodies: RapierRigidBody[] = [];
+
+  $effect(() => { for(const body of bodies){
+    // body.setNextKinematicTranslation
+    // body.setTranslation(speed * currTime)
+    //TODO: besser vllt rigidbodies raus und nur collider updaten?
+  } }); 
+
   const renderCubes = $derived(
     cubes.filter((cube) => {
       const t = cube._note._time;
@@ -69,7 +78,7 @@
       position.z={position.z - offsetZ + speed * currTime}
     >
       <CollisionGroups groups={colGroups}>
-        <RigidBody>
+        <RigidBody bind:rigidBody={bodies[index]}>
           <Collider
             shape="cuboid"
             mass={0.5}
