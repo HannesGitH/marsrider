@@ -1,4 +1,5 @@
 <script lang="ts">
+  export const ssr = false; 
   import * as EXTRA from "@threlte/extras";
   import Fists from "$lib/components/Fists.svelte";
   import { Controller, XR } from "@threlte/xr";
@@ -31,8 +32,7 @@
   });
 
   const onPausePressed = async () => {
-    console.log('pause pressed');
-    if (!audio) return; 
+    if (!audio) return;
     const playing = await audio.togglePlayPause({ shouldPause: !isPaused });
     isPaused = !playing;
   };
@@ -76,7 +76,10 @@
     <EXTRA.Text text={title} position={[0, 0.3, 0]} anchorX="center" />
     <PlayButton paused={isPaused} onPressed={onPausePressed} />
   </T.Group>
-  <Beats notes={data.map._notes} currTime={(time * data.bpm) / 60} />
+  <Beats
+    notes={data.map._notes}
+    currTime={(time * data.bpm) / 60 - data.beatOffset}
+  />
 {/if}
 <Platform />
 
